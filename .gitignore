@@ -1,3 +1,6 @@
+# Project Specific Python Dependencies
+recipe-scrapers/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
