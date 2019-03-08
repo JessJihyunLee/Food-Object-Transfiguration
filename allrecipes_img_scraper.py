@@ -30,6 +30,8 @@ browser = webdriver.Chrome(executable_path=driver_path, chrome_options=options)
 
 # define webpage to scrape
 brisket_url = "https://www.allrecipes.com/search/results/?wt=brisket&sort=re&page={}"
+# for testing
+brisket_url = "https://www.allrecipes.com/search/results/?wt=chicken&sort=re&page={}"
 timeout = 10
 page_num = 1
 recipe_link_class_name = 'grid-card-image-container'
@@ -44,4 +46,10 @@ except TimeoutException:
     print('Timed out waiting for page to load')
     browser.quit()
 
+article_elements = browser.find_elements_by_class_name(recipe_link_class_name)
+for element in article_elements:
+    link_holder = element.find_element_by_tag_name('a')
+    print(link_holder.get_attribute('href'))
+
+st()
     #break
