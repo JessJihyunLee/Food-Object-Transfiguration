@@ -38,6 +38,31 @@ def create_webdriver(incognito:bool=True, headless:bool=True):
                                'chrome driver')
     return webdriver.Chrome(executable_path=driver_path, chrome_options=options)
 
+def get_page(driver:WebDriver, url:str, timeout:int=20,
+             by_type:str, wait_ele:str) -> None:
+    """Retrieve a page and wait until a certain element has been loaded.
+
+    Args:
+        driver: Chrome driver object used to scrape data.
+        url: Url for the Chrome driver to load.
+        timeout: Number of seconds to wait for the page to load.
+        by_type: Attribute of element to wait for chosen from constants defined
+            in `selenium.webdriver.common.by.By`.
+        wait_ele: Specified parameter for to wait for defined by by_type.
+
+    Raises:
+        TimeoutException: If page doesn't load in a specified amount of seconds
+    """
+    driver.get(url)
+
+    try:
+        WebDriverWait(driver, timeout).until(EC.visibility_of_element_located((
+            by_type, wait_ele)))
+    except TimeoutException:
+        print('Timed out waiting for page to load')
+        driver.quit()
+
+driver = create_webdriver(headless=False)
 # define webpage to scrape
 brisket_url = "https://www.allrecipes.com/search/results/?wt=brisket&sort=re&page={}"
 #  for testing
@@ -47,24 +72,19 @@ page_num = 1
 recipe_link_class_name = 'grid-card-image-container'
 
 #while True:
-browser.get(brisket_url.format(page_num))
-
-try:
-    WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((
-        By.CLASS_NAME, recipe_link_class_name)))
-except TimeoutException:
-    print('Timed out waiting for page to load')
-    browser.quit()
 
 # grab the element with the recipe link
 # links = [element.find_element_by_tag_name('a').get_attribute('a')
 #          for element in article_elements]
+# TODO: Running with O(2n) right now; consolidate to not need to postproc links
 links = []
-article_elements = browser.find_elements_by_class_name(recipe_link_class_name)
+article_elements = driver.find_elements_by_class_name(recipe_link_class_name)
 for element in article_elements:
     link_holder = element.find_element_by_tag_name('a')
     links.append(link_holder.get_attribute('href'))
 
+for recipe_link in links:
+    driver.get(recipe_link)
+
 st()
     #break
-
