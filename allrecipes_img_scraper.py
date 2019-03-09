@@ -1,4 +1,5 @@
 import os
+import re
 from pdb import set_trace as st
 
 from selenium import webdriver
@@ -62,6 +63,11 @@ def get_page(driver:webdriver.chrome.webdriver.WebDriver,
         print('Timed out waiting for page to load')
         driver.quit()
 
+
+# we make a strict regex rule to ensure we don't get other links that the
+# photo grid might; we only want the photos
+RE_RECIPE_PHOTOS = r'https:\/\/www\.allrecipes\.com\/recipe\/\d*\/.*\/photos\/\d*\/'
+
 driver = create_webdriver(headless=False)
 # define webpage to scrape
 brisket_url = "https://www.allrecipes.com/search/results/?wt=brisket&sort=re&page={}"
@@ -71,10 +77,10 @@ timeout = 10
 page_num = 1
 
 # class names for elements to find
-recipe_link_class_name = 'grid-card-image-container'
+recipe_link_class = 'grid-card-image-container'
 photo_strip_class = 'photo-strip__items'
 
-get_page(driver, brisket_url.format(1), By.CLASS_NAME, recipe_link_class_name, timeout)
+get_page(driver, brisket_url.format(1), By.CLASS_NAME, recipe_link_class, timeout)
 
 
 #while True:
@@ -84,16 +90,27 @@ get_page(driver, brisket_url.format(1), By.CLASS_NAME, recipe_link_class_name, t
 #          for element in article_elements]
 # TODO: Running with O(2n) right now; consolidate to not need to postproc links
 links = []
-article_elements = driver.find_elements_by_class_name(recipe_link_class_name)
+article_elements = driver.find_elements_by_class_name(recipe_link_class)
 for element in article_elements:
     link_holder = element.find_element_by_tag_name('a')
     links.append(link_holder.get_attribute('href'))
 
 # now process each recipe and get the the link to the photos
-photo_strip_links = []
+links_to_photos = []
 for recipe_link in links:
     # retrieve the page 
     get_page(driver, recipe_link, By.CLASS_NAME, photo_strip_class, timeout)
+    # photo strip has the link to the photos
+    photo_strip = driver.find_element_by_class_name('photo-strip__items')
+    # <a> elements have the links to the photos
+    a_elements = photo_strip.find_elements_by_tag_name('a')
+    while a_elements:
+        element = a_elements.pop()
+        href = element.get_attribute('href')
+        if re.match(RE_RECIPE_PHOTOS, href):
+            # we found a valid link; stop since they all link to the same photos
+            links_to_photos.append(href)
+            break
     st()
 
     #break
