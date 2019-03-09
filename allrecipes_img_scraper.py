@@ -89,15 +89,15 @@ get_page(driver, brisket_url.format(1), By.CLASS_NAME, recipe_link_class, timeou
 # links = [element.find_element_by_tag_name('a').get_attribute('a')
 #          for element in article_elements]
 # TODO: Running with O(2n) right now; consolidate to not need to postproc links
-links = []
+links_to_recipes = []
 article_elements = driver.find_elements_by_class_name(recipe_link_class)
 for element in article_elements:
     link_holder = element.find_element_by_tag_name('a')
-    links.append(link_holder.get_attribute('href'))
+    links_to_recipes.append(link_holder.get_attribute('href'))
 
 # now process each recipe and get the the link to the photos
 links_to_photos = []
-for recipe_link in links:
+for recipe_link in links_to_recipes:
     # retrieve the page 
     get_page(driver, recipe_link, By.CLASS_NAME, photo_strip_class, timeout)
     # photo strip has the link to the photos
@@ -105,11 +105,11 @@ for recipe_link in links:
     # <a> elements have the links to the photos
     a_elements = photo_strip.find_elements_by_tag_name('a')
     while a_elements:
-        element = a_elements.pop()
-        href = element.get_attribute('href')
-        if re.match(RE_RECIPE_PHOTOS, href):
+        link_holder = a_elements.pop()
+        link = link_holder.get_attribute('href')
+        if re.match(RE_RECIPE_PHOTOS, link):
             # we found a valid link; stop since they all link to the same photos
-            links_to_photos.append(href)
+            links_to_photos.append(link)
             break
     st()
 
