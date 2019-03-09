@@ -1,5 +1,6 @@
 import os
 import re
+import requests
 from pdb import set_trace as st
 
 from selenium import webdriver
@@ -84,7 +85,10 @@ photos_band_class = 'photos--band'
 
 get_page(driver, brisket_url.format(1), By.CLASS_NAME, recipe_link_class, timeout)
 
+if not os.path.isdir('img'):
+    os.makdir('img')
 
+photo_id = 1
 #while True:
 
 # grab the element with the recipe link
@@ -128,4 +132,12 @@ for link_to_photo in links_to_photos:
             if link.startswith(IMG_LINK_DOMAIN):
                 photo_links.append(link)
     #break
+
+
+st()
+for photo_link in photo_links:
+    res = requests.get(photo_link)
+    with open('img/brisket_{}.jpg'.format(photo_id), 'wb') as in_file:
+        in_file.write(res.content)
+    photo_id += 1
 driver.quit()
