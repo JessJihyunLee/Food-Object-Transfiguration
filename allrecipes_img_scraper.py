@@ -38,8 +38,8 @@ def create_webdriver(incognito:bool=True, headless:bool=True):
                                'chrome driver')
     return webdriver.Chrome(executable_path=driver_path, chrome_options=options)
 
-def get_page(driver:WebDriver, url:str, timeout:int=20,
-             by_type:str, wait_ele:str) -> None:
+def get_page(driver:webdriver.chrome.webdriver.WebDriver,
+             url:str, by_type:str, wait_ele:str, timeout:int=20) -> None:
     """Retrieve a page and wait until a certain element has been loaded.
 
     Args:
@@ -69,7 +69,13 @@ brisket_url = "https://www.allrecipes.com/search/results/?wt=brisket&sort=re&pag
 brisket_url = "https://www.allrecipes.com/search/results/?wt=chicken&sort=re&page={}"
 timeout = 10
 page_num = 1
+
+# class names for elements to find
 recipe_link_class_name = 'grid-card-image-container'
+photo_strip_class = 'photo-strip__items'
+
+get_page(driver, brisket_url.format(1), By.CLASS_NAME, recipe_link_class_name, timeout)
+
 
 #while True:
 
@@ -83,8 +89,12 @@ for element in article_elements:
     link_holder = element.find_element_by_tag_name('a')
     links.append(link_holder.get_attribute('href'))
 
+# now process each recipe and get the the link to the photos
+photo_strip_links = []
 for recipe_link in links:
-    driver.get(recipe_link)
+    # retrieve the page 
+    get_page(driver, recipe_link, By.CLASS_NAME, photo_strip_class, timeout)
+    st()
 
-st()
     #break
+driver.quit()
