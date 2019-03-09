@@ -67,6 +67,7 @@ def get_page(driver:webdriver.chrome.webdriver.WebDriver,
 # we make a strict regex rule to ensure we don't get other links that the
 # photo grid might; we only want the photos
 RE_RECIPE_PHOTOS = r'https:\/\/www\.allrecipes\.com\/recipe\/\d*\/.*\/photos\/\d*\/'
+IMG_LINK_DOMAIN = 'https://images.media-allrecipes.com/'
 
 driver = create_webdriver(headless=False)
 # define webpage to scrape
@@ -79,6 +80,7 @@ page_num = 1
 # class names for elements to find
 recipe_link_class = 'grid-card-image-container'
 photo_strip_class = 'photo-strip__items'
+photos_band_class = 'photos--band'
 
 get_page(driver, brisket_url.format(1), By.CLASS_NAME, recipe_link_class, timeout)
 
@@ -111,7 +113,19 @@ for recipe_link in links_to_recipes:
             # we found a valid link; stop since they all link to the same photos
             links_to_photos.append(link)
             break
-    st()
 
+# the element holding all of the photos is a <ul> element, but the <li> elements
+# are holding <img> elements with the 'src' attribute that holds the link to the
+# images want
+photo_links = []
+for link_to_photo in links_to_photos:
+    get_page(driver, link_to_photo, By.CLASS_NAME, photos_band_class, timeout)
+    photos_band = driver.find_element_by_class_name(photos_band_class)
+    img_elements = photos_band.find_elements_by_tag_name('img')
+    for img in img_elements:
+        link = img.get_attribute('data-original-src')
+        if type(link) == str:
+            if link.startswith(IMG_LINK_DOMAIN):
+                photo_links.append(link)
     #break
 driver.quit()
