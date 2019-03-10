@@ -97,10 +97,8 @@ driver = create_webdriver()
 signal.signal(signal.SIGINT, signal_handler)
 
 # define webpage to scrape
-brisket_url = "https://www.allrecipes.com/search/results/?wt=brisket&sort=re&page={}"
-# for testing
-# brisket_url = "https://www.allrecipes.com/search/results/?wt=chicken&sort=re&page={}"
-timeout = 10
+search_url = 'https://www.allrecipes.com/search/results/?wt=chicken%20wings&sort=re&page={}'
+timeout = 20
 page_num = 1
 photo_id = 1
 
@@ -120,7 +118,7 @@ print('Initialization complete.')
 
 while True:
     print('\nCollecting recipes on page {}'.format(page_num))
-    get_page(driver, brisket_url.format(page_num), By.CLASS_NAME,
+    get_page(driver, search_url.format(page_num), By.CLASS_NAME,
              recipe_link_class, timeout)
 
     # grab the element with the recipe link
@@ -173,7 +171,7 @@ while True:
     print('Saved photo', end=' ')
     for photo_link in photo_links:
         res = requests.get(photo_link)
-        with open('img/brisket_{}.jpg'.format(photo_id), 'wb') as in_file:
+        with open('img/chicken_wing_{}.jpg'.format(photo_id), 'wb') as in_file:
             in_file.write(res.content)
         print(photo_id, end=' ')
         photo_id += 1
