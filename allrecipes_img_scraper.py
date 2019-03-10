@@ -21,8 +21,10 @@ def create_webdriver(incognito:bool=True, headless:bool=True):
     """
     # add webdriver options
     options = webdriver.ChromeOptions()
-    options.add_argument(' — incognito')
-    #options.add_argument('headless')
+    if incognito:
+        options.add_argument(' — incognito')
+    if headless:
+        options.add_argument('headless')
 
     # initialize chrome instance
     driver_path = os.environ.get('CHROME_DRIVER_PATH')
@@ -70,7 +72,7 @@ def get_page(driver:webdriver.chrome.webdriver.WebDriver,
 RE_RECIPE_PHOTOS = r'https:\/\/www\.allrecipes\.com\/recipe\/\d*\/.*\/photos\/\d*\/'
 IMG_LINK_DOMAIN = 'https://images.media-allrecipes.com/'
 
-driver = create_webdriver(headless=False)
+driver = create_webdriver()
 # define webpage to scrape
 brisket_url = "https://www.allrecipes.com/search/results/?wt=brisket&sort=re&page={}"
 #  for testing
@@ -134,7 +136,6 @@ for link_to_photo in links_to_photos:
     #break
 
 
-st()
 for photo_link in photo_links:
     res = requests.get(photo_link)
     with open('img/brisket_{}.jpg'.format(photo_id), 'wb') as in_file:
