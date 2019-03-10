@@ -1,7 +1,8 @@
 import os
 import re
-import sys
 import requests
+import signal
+import sys
 from pdb import set_trace as st
 
 from selenium import webdriver
@@ -9,6 +10,14 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
+
+def signal_handler(sig, frame):
+    """Catch SIGINTS and terminate gracefully."""
+    global driver
+    print('Ctrl-C caught. Terminating Chrome instance...')
+    driver.quit()
+    print('Exiting...')
+    sys.exit()
 
 def create_webdriver(incognito:bool=True, headless:bool=True):
     """Instantiate and return a selenium chrome webdriver.
@@ -85,6 +94,8 @@ RE_RECIPE_PHOTOS = r'https:\/\/www\.allrecipes\.com\/recipe\/\d*\/.*\/photos\/\d
 IMG_LINK_DOMAIN = 'https://images.media-allrecipes.com/'
 
 driver = create_webdriver()
+signal.signal(signal.SIGINT, signal_handler)
+
 # define webpage to scrape
 brisket_url = "https://www.allrecipes.com/search/results/?wt=brisket&sort=re&page={}"
 # for testing
@@ -123,7 +134,8 @@ while True:
         links_to_recipes.append(link_holder.get_attribute('href'))
 
     # now process each recipe and get the the link to the photos
-    print('Collecting links to photos page for each recipe.')
+    print('{} recipes found. Collecting links to photos page for each recipe.'
+          .format(len(links_to_recipes), end=' '))
     links_to_photos = []
     for recipe_link in links_to_recipes:
         # retrieve the page
@@ -139,11 +151,13 @@ while True:
                 # we found a valid link; stop since they all link to the same photos
                 links_to_photos.append(link)
                 break
+        print('.', end=' ')  # hinting on the progress it's making
 
     # the element holding all of the photos is a <ul> element, but the <li> elements
     # are holding <img> elements with the 'src' attribute that holds the link to the
     # images want
-    print('Collecting individual photo links.')
+    print('{} photo links found. Collecting individual photo links.'
+          .format(len(links_to_photos), end=' '))
     photo_links = []
     for link_to_photo in links_to_photos:
         get_page(driver, link_to_photo, By.CLASS_NAME, photos_band_class, timeout)
@@ -154,6 +168,7 @@ while True:
             if type(link) == str:
                 if link.startswith(IMG_LINK_DOMAIN):
                     photo_links.append(link)
+        print('.', end=' ')
 
     print('Saved photo', end=' ')
     for photo_link in photo_links:
