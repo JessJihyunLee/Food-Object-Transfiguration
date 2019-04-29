@@ -9,10 +9,11 @@ Repository for Cognitive Computing final project: image transfer between Chicken
 4. Before implemented, each folder has images of chicken wings and blueberry muffins and named after food name.
 
 # Performance Comparison among Cycle GAN, DualGAN, and XGAN on Food Object Transfiguraion
-1. Model performance and insights are posted on :
+1. Model performance and insights are posted on :</br>
 [Object Transfiguration : Chicken Wings to Blueberry Muffins using GANs](https://medium.com/@carollee827/object-transfiguration-chicken-wings-to-blueberry-muffins-using-discogan-cyclegan-dualgan-and-d4953be7a0ce)
 
-# Cycle GAN setup
+# GAN setup
+### Cycle GAN setup
 1. First split images to train and test data set. I used paperspace python 3.
    Refer to [Preprocess Before Run](https://github.com/JessJihyunLee/Food-Object-Transfiguration/blob/master/Cycle-GAN/preprocess_beforerun.py)
 2. Run python files in following order (CD) :</br>
@@ -23,7 +24,7 @@ Repository for Cognitive Computing final project: image transfer between Chicken
 `python cyclegan.py`</br>
 `python example.py`</br>
 
-# DualGAN setup
+### DualGAN setup
 
 
-# XGAN setup
+### XGAN setup
