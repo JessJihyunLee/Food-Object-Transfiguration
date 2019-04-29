@@ -28,3 +28,11 @@ Repository for Cognitive Computing final project: image transfer between Chicken
 
 
 ### XGAN setup
+1. Split images same as [Cycel GAN Preprocess Before Run](https://github.com/JessJihyunLee/Food-Object-Transfiguration/blob/master/Cycle-GAN/preprocess_beforerun.py)
+2. Run python files in following order (CD) :</br>
+`python utils.py`</br>
+`python ops.py`</br>
+`python flip_gradient.py`</br>
+`python module.py`</br>
+`python model.py`</br>
+`python main.py --dataset './foodXGAN'`</br>
