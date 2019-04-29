@@ -12,9 +12,9 @@ Repository for Cognitive Computing final project: image transfer between Chicken
 1. First split images to train and test data set. I used paperspace python 3.
    Refer to [Preprocess Before Run](https://github.com/JessJihyunLee/Food-Object-Transfiguration/blob/master/Cycle-GAN/preprocess_beforerun.py)
 2. Run python files in following order (CD):
-`python build_dataset.py foodcycleGAN/trainA foodcycleGAN/trainB trainA trainB`
-`python utils.py`
-`python generator.py`
-`python discriminator.py`
-`python cyclegan.py`
-`python example.py`
+`python build_dataset.py foodcycleGAN/trainA foodcycleGAN/trainB trainA trainB`</br>
+`python utils.py`</br>
+`python generator.py`</br>
+`python discriminator.py`</br>
+`python cyclegan.py`</br>
+`python example.py`</br>
