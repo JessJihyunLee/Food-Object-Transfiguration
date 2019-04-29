@@ -6,10 +6,11 @@ Repository for Cognitive Computing final project: image transfer between Chicken
 `git clone https://github.com/huynhtastic/recipe-scrapers.git`
 2. CD into recipe-scrapers
 3. Run `python setup.py install`
-4. Before implemented, each folder has images of chicken wings and blueberry muffins and named after food name.
+4. Before implemented, each folder has images of chicken wings and blueberry muffins and named after food name.</br>
+   Folders are under higher level folder name 'foodcycleGAN'
 
 # Performance Comparison among Cycle GAN, DualGAN, and XGAN on Food Object Transfiguraion
-1. Model performance and insights are posted on :</br>
+1. Model performance and insights are posted on Medium:</br>
 [Object Transfiguration : Chicken Wings to Blueberry Muffins using GANs](https://medium.com/@carollee827/object-transfiguration-chicken-wings-to-blueberry-muffins-using-discogan-cyclegan-dualgan-and-d4953be7a0ce)
 
 # GAN setup
@@ -28,7 +29,7 @@ Repository for Cognitive Computing final project: image transfer between Chicken
 
 
 ### XGAN setup
-1. Split images same as [Cycel GAN Preprocess Before Run](https://github.com/JessJihyunLee/Food-Object-Transfiguration/blob/master/Cycle-GAN/preprocess_beforerun.py)
+1. Split images same as [XGAN Preprocess Before Run](https://github.com/JessJihyunLee/Food-Object-Transfiguration/blob/master/X-GAN/Preprocess_beforerun.py)
 2. Run python files in following order (CD) :</br>
 `python utils.py`</br>
 `python ops.py`</br>
