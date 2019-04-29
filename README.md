@@ -10,7 +10,7 @@ Repository for Cognitive Computing final project: image transfer between Chicken
    Folders are under higher level folder name 'foodcycleGAN'
 
 # Performance Comparison among Cycle GAN, DualGAN, and XGAN on Food Object Transfiguraion
-* Model performance and insights are posted on Medium:</br> *
+```Model performance and insights are posted on Medium:</br>```
 [Object Transfiguration : Chicken Wings to Blueberry Muffins using GANs](https://medium.com/@carollee827/object-transfiguration-chicken-wings-to-blueberry-muffins-using-discogan-cyclegan-dualgan-and-d4953be7a0ce)
 
 # GAN setup
