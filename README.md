@@ -7,3 +7,14 @@ Repository for Cognitive Computing final project: image transfer between Chicken
 2. CD into recipe-scrapers
 3. Run `python setup.py install`
 4. Before implemented, each folder has images of chicken wings and blueberry muffins and named after food name.
+
+# Cycle GAN setup
+1. First split images to train and test data set. I used paperspace python 3.
+   Refer to [Preprocess Before Run](https://github.com/JessJihyunLee/Food-Object-Transfiguration/blob/master/Cycle-GAN/preprocess_beforerun.py)
+2. Run python files in following order (CD):
+`python build_dataset.py foodcycleGAN/trainA foodcycleGAN/trainB trainA trainB`
+`python utils.py`
+`python generator.py`
+`python discriminator.py`
+`python cyclegan.py`
+`python example.py`
